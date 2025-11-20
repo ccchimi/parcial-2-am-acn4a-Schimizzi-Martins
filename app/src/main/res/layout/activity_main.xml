@@ -6,12 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Contenido principal -->
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:gravity="center_horizontal">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -20,98 +20,47 @@
             android:background="@color/primary"
             android:elevation="4dp">
 
-            <!-- Título a la izquierda -->
             <TextView
-                android:id="@+id/toolbarTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
-                android:textColor="@android:color/white"
+                android:text="Inicio"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:layout_gravity="start"
-                android:paddingEnd="8dp"/>
+                android:textColor="@android:color/white"/>
 
-            <TextView
-                android:id="@+id/tvMainTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Recetas"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:padding="12dp"/>
-
-            <!-- Logo a la derecha -->
-            <ImageView
-                android:id="@+id/toolbarLogo"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:src="@drawable/tastel"
-                android:layout_gravity="end"
-                android:contentDescription="Logo Tastel"/>
-
-            <!-- Icono de cuenta -->
             <ImageView
                 android:id="@+id/ivAccount"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:src="@drawable/cuenta"
                 android:layout_gravity="end"
-                android:contentDescription="Cuenta"
                 android:layout_marginEnd="8dp"/>
         </androidx.appcompat.widget.Toolbar>
 
-        <!-- Buscador con botón a la derecha -->
-        <LinearLayout
-            android:layout_width="match_parent"
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:src="@drawable/tastel"
+            android:layout_marginTop="40dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="8dp">
+            android:text="Bienvenido a Tastel 🍝"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"/>
 
-            <EditText
-                android:id="@+id/etSearch"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/home_search_hint"
-                android:padding="8dp"
-                android:background="@drawable/edit_text_background"/>
-
-            <Button
-                android:id="@+id/btnSearch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/home_search_button"
-                android:textColor="@android:color/white"
-                android:backgroundTint="@color/primary"
-                android:layout_marginStart="8dp"/>
-        </LinearLayout>
-
-        <!-- Categorías -->
-        <HorizontalScrollView
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:scrollbars="none">
-
-            <LinearLayout
-                android:id="@+id/categoriesLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"/>
-        </HorizontalScrollView>
-
-        <!-- RecyclerView -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvRecipes"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_marginTop="8dp"/>
+            android:text="Descubrí recetas, guardá tus favoritas y cociná fácil."
+            android:textSize="16sp"
+            android:gravity="center"
+            android:layout_marginTop="10dp"/>
 
     </LinearLayout>
 
-    <!-- Navigation Drawer -->
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigationView"
         android:layout_width="wrap_content"
