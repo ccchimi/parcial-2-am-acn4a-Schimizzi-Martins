@@ -125,6 +125,26 @@ public class RecipesActivity extends AppCompatActivity {
             if (q.isEmpty()) adapter.setRecipes(showingFavorites ? getFavoriteRecipes() : getAllRecipes());
             else adapter.setRecipes(searchRecipes(q));
         });
+
+        ImageView ivAccount = findViewById(R.id.ivAccount);
+        ivAccount.setOnClickListener(v -> {
+            PopupMenu menu = new PopupMenu(this, ivAccount);
+            if(LoginActivity.currentUser == null) menu.getMenu().add("Login");
+            else menu.getMenu().add("Logout");
+
+            menu.setOnMenuItemClickListener(item -> {
+                if(item.getTitle().equals("Login")) {
+                    startActivity(new Intent(this, LoginActivity.class));
+                } else {
+                    Toast.makeText(this, getString(R.string.session_closed), Toast.LENGTH_SHORT).show();
+                    LoginActivity.currentUser = null;
+                    startActivity(new Intent(this, LoginActivity.class));
+                    finish();
+                }
+                return true;
+            });
+            menu.show();
+        });
     }
 
     private List<Recipe> getAllRecipes() {
