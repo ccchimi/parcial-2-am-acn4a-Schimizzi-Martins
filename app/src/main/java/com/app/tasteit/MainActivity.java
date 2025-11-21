@@ -85,6 +85,20 @@ public class MainActivity extends AppCompatActivity {
             });
             menu.show();
         });
+
+        findViewById(R.id.btnGoRecipes).setOnClickListener(v -> {
+            startActivity(new Intent(this, RecipesActivity.class));
+        });
+
+        findViewById(R.id.btnGoFav).setOnClickListener(v -> {
+            Intent intent = new Intent(this, RecipesActivity.class);
+            intent.putExtra("showFavorites", true);
+            startActivity(intent);
+        });
+
+        findViewById(R.id.btnCommunity).setOnClickListener(v -> {
+            Toast.makeText(this, "Comunidad próximamente 🚧", Toast.LENGTH_SHORT).show();
+        });
     }
 
     @Override
