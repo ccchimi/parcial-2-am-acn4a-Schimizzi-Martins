@@ -13,7 +13,7 @@ public class RetrofitClient {
     public static RecipesApiService getApiService() {
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
-                    .baseUrl(BASE_URL) // OJO: termina en "/"
+                    .baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
