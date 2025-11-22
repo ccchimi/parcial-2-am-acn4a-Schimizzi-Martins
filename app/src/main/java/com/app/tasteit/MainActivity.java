@@ -5,6 +5,8 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,7 +15,11 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.navigation.NavigationView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,11 +27,14 @@ public class MainActivity extends AppCompatActivity {
     NavigationView navigationView;
     ActionBarDrawerToggle toggle;
 
+    RecyclerView rvHighlights;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Toolbar + Drawer
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -65,15 +74,15 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
-        // Menú de cuenta
+        // Menu de cuenta (icono arriba a la derecha)
         ImageView ivAccount = findViewById(R.id.ivAccount);
         ivAccount.setOnClickListener(v -> {
             PopupMenu menu = new PopupMenu(this, ivAccount);
-            if(LoginActivity.currentUser == null) menu.getMenu().add("Login");
+            if (LoginActivity.currentUser == null) menu.getMenu().add("Login");
             else menu.getMenu().add("Logout");
 
             menu.setOnMenuItemClickListener(item -> {
-                if(item.getTitle().equals("Login")) {
+                if (item.getTitle().equals("Login")) {
                     startActivity(new Intent(this, LoginActivity.class));
                 } else {
                     Toast.makeText(this, getString(R.string.session_closed), Toast.LENGTH_SHORT).show();
@@ -86,9 +95,10 @@ public class MainActivity extends AppCompatActivity {
             menu.show();
         });
 
-        findViewById(R.id.btnGoRecipes).setOnClickListener(v -> {
-            startActivity(new Intent(this, RecipesActivity.class));
-        });
+        // Botones de accesos rapidos
+        findViewById(R.id.btnGoRecipes).setOnClickListener(v ->
+                startActivity(new Intent(this, RecipesActivity.class))
+        );
 
         findViewById(R.id.btnGoFav).setOnClickListener(v -> {
             Intent intent = new Intent(this, RecipesActivity.class);
@@ -96,14 +106,46 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        findViewById(R.id.btnCommunity).setOnClickListener(v -> {
-            Toast.makeText(this, "Comunidad próximamente 🚧", Toast.LENGTH_SHORT).show();
-        });
+        findViewById(R.id.btnCommunity).setOnClickListener(v ->
+                Toast.makeText(this, "Comunidad próximamente 🚧", Toast.LENGTH_SHORT).show()
+        );
+
+        // HERO: cargar imagen de fondo con Glide
+        ImageView heroImage = findViewById(R.id.heroImage);
+        Glide.with(this)
+                .load("https://images.pexels.com/photos/6287521/pexels-photo-6287521.jpeg")
+                .into(heroImage);
+
+        // CARRUSEL DE DESTACADOS
+        rvHighlights = findViewById(R.id.rvHighlights);
+        rvHighlights.setLayoutManager(
+                new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        );
+
+        List<HomeHighlight> highlights = new ArrayList<>();
+        highlights.add(new HomeHighlight(
+                "Clásicos para todos los días",
+                "Pastas, guisos y platos fáciles para el día a día.",
+                "https://images.pexels.com/photos/1437267/pexels-photo-1437267.jpeg"
+        ));
+        highlights.add(new HomeHighlight(
+                "Recetas para invitar",
+                "Ideas para sorprender cuando tenés gente en casa.",
+                "https://images.pexels.com/photos/4099235/pexels-photo-4099235.jpeg"
+        ));
+        highlights.add(new HomeHighlight(
+                "Postres que no fallan",
+                "Tiramisú, budines y algo dulce para cerrar.",
+                "https://images.pexels.com/photos/3026808/pexels-photo-3026808.jpeg"
+        ));
+
+        HomeHighlightAdapter highlightAdapter = new HomeHighlightAdapter(this, highlights);
+        rvHighlights.setAdapter(highlightAdapter);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(toggle != null && toggle.onOptionsItemSelected(item)) return true;
+        if (toggle != null && toggle.onOptionsItemSelected(item)) return true;
         return super.onOptionsItemSelected(item);
     }
 }
