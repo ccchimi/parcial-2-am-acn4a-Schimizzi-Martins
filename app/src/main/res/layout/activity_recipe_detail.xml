@@ -50,7 +50,7 @@
                 android:id="@+id/communityAuthor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@autor"
+                android:text="Autor: usuario"
                 android:textSize="@dimen/text_small"
                 android:textColor="@color/secondary"
                 android:layout_marginTop="@dimen/margin_xs"/>
