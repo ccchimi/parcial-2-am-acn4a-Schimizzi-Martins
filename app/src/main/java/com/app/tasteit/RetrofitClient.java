@@ -5,15 +5,16 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
 
+    // Usamos jsDelivr para evitar 429 de GitHub
     private static final String BASE_URL =
-            "https://raw.githubusercontent.com/ccchimi/parcial-2-am-acn4a-Schimizzi-Martins/main/";
+            "https://cdn.jsdelivr.net/gh/ccchimi/parcial-2-am-acn4a-Schimizzi-Martins@main/";
 
     private static Retrofit retrofit = null;
 
     public static RecipesApiService getApiService() {
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
+                    .baseUrl(BASE_URL)   // termina en "/"
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
