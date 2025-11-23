@@ -1,9 +1,10 @@
 <resources>
     <color name="primary">#FF6600</color>
-    <color name="secondary">#FFFFFF</color>
+    <color name="secondary">#FF6600</color>
     <color name="textPrimary">#000000</color>
     <color name="textSecondary">#555555</color>
     <color name="white">#FFFFFF</color>
+    <color name="screenBackground">#FFFFFF</color>
 
     <color name="primaryPastel">#FF9E9E</color>
     <color name="secondaryPastel">#FFD88A</color>
