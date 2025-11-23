@@ -81,39 +81,39 @@
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:text="💾 Descargar"
-                android:gravity="center"
                 android:textSize="14sp"
+                android:gravity="center"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
-                android:background="@drawable/btn_download_pastel"
-                android:textColor="@color/textPrimary"
+                android:backgroundTint="@color/primary"
+                android:textColor="@color/white"
                 android:layout_marginEnd="@dimen/margin_s"/>
 
             <Button
                 android:id="@+id/btnEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:minWidth="90dp"
                 android:text="✏️ Editar"
                 android:textSize="14sp"
                 android:gravity="center"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
-                android:background="@drawable/btn_edit_rose"
-                android:textColor="@color/textPrimary"
-                android:layout_marginStart="@dimen/margin_s"/>
+                android:backgroundTint="@color/primary"
+                android:textColor="@color/white"
+                android:layout_marginEnd="@dimen/margin_s"/>
         </LinearLayout>
 
         <Button
             android:id="@+id/btnBack"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:text="← Volver"
+            android:text="⬅ Volver"
             android:textSize="14sp"
-            android:textColor="@color/textPrimary"
-            android:background="@drawable/btn_back_soft"
-            android:paddingLeft="24dp"
-            android:paddingRight="24dp"
+            android:gravity="center"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:backgroundTint="@color/primary"
+            android:textColor="@color/white"
             android:layout_marginTop="@dimen/margin_m"/>
     </LinearLayout>
 </ScrollView>
