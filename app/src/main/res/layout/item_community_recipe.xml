@@ -4,87 +4,89 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/margin_m"
-    app:cardCornerRadius="@dimen/card_radius_large"
-    app:cardElevation="@dimen/card_elevation"
-    android:foreground="?attr/selectableItemBackground"
+    android:layout_margin="@dimen/margin_m"
+    app:cardCornerRadius="18dp"
+    app:cardElevation="6dp"
     android:clickable="true"
-    android:focusable="true">
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:padding="@dimen/padding_m">
 
-        <ImageView
-            android:id="@+id/communityImage"
-            android:layout_width="@dimen/recipe_image_size"
-            android:layout_height="@dimen/recipe_image_size"
-            android:scaleType="centerCrop"
-            android:adjustViewBounds="true"
-            android:src="@drawable/tastel"
-            android:contentDescription="Imagen de receta"
-            android:background="@drawable/edit_text_background"
-            android:clipToOutline="true" />
+        <!-- IMAGEN PRINCIPAL -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="180dp">
 
-        <LinearLayout
+            <ImageView
+                android:id="@+id/communityImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
+                android:contentDescription="Imagen receta"
+                android:background="@drawable/edit_text_background"
+                android:clipToOutline="true" />
+
+            <!-- Botón favoritos en esquina tipo apps PRO -->
+            <ImageView
+                android:id="@+id/btnFavFromCommunity"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="end|top"
+                android:layout_margin="8dp"
+                android:padding="6dp"
+                android:background="@drawable/bg_circle_white"
+                android:src="@drawable/ic_star_border_24"
+                android:contentDescription="Favorito" />
+        </FrameLayout>
+
+        <!-- Titulo -->
+        <TextView
+            android:id="@+id/communityTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_toEndOf="@id/communityImage"
-            android:layout_marginStart="@dimen/margin_m"
-            android:gravity="center_vertical">
+            android:text="Título de receta"
+            android:textColor="@color/textPrimary"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_marginTop="10dp"/>
 
-            <TextView
-                android:id="@+id/communityTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Título de receta"
-                android:textStyle="bold"
-                android:textSize="@dimen/text_medium"
-                android:textColor="@color/textPrimary"
-                android:maxLines="1"
-                android:ellipsize="end" />
+        <!-- Autor -->
+        <TextView
+            android:id="@+id/communityAuthor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@chef_julia"
+            android:textColor="@color/secondary"
+            android:textSize="14sp"
+            android:layout_marginTop="4dp"/>
 
-            <TextView
-                android:id="@+id/communityAuthor"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Autor desconocido"
-                android:textSize="@dimen/text_small"
-                android:textColor="@color/secondary"
-                android:layout_marginTop="@dimen/margin_xs" />
+        <!-- Descripción -->
+        <TextView
+            android:id="@+id/communityDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Descripción de la receta..."
+            android:textColor="@color/textSecondary"
+            android:textSize="14sp"
+            android:maxLines="3"
+            android:ellipsize="end"
+            android:layout_marginTop="6dp"/>
 
-            <TextView
-                android:id="@+id/communityDescription"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Descripción breve..."
-                android:textSize="@dimen/text_normal"
-                android:textColor="@color/textSecondary"
-                android:layout_marginTop="@dimen/margin_xs"
-                android:maxLines="2"
-                android:ellipsize="end" />
-
-            <TextView
-                android:id="@+id/communityTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Tiempo: 20 min"
-                android:textSize="@dimen/text_small"
-                android:textColor="@color/textSecondary"
-                android:layout_marginTop="@dimen/margin_xs" />
-        </LinearLayout>
-
-        <ImageView
-            android:id="@+id/btnFavFromCommunity"
-            android:layout_width="@dimen/icon_size"
-            android:layout_height="@dimen/icon_size"
-            android:src="@android:drawable/btn_star_big_off"
-            android:contentDescription="Agregar a favoritos"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="@dimen/margin_s"
-            android:layout_marginTop="@dimen/margin_s" />
-    </RelativeLayout>
+        <!-- Tiempo -->
+        <TextView
+            android:id="@+id/communityTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="20 min"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/secondary"
+            android:textSize="13sp"/>
+    </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>
