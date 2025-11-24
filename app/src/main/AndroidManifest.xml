@@ -25,6 +25,11 @@
             </intent-filter>
         </activity>
 
+        <!-- REGISTER (Nueva actividad para creacion de usuarios) -->
+        <activity
+            android:name=".RegisterActivity"
+            android:exported="false" />
+
         <!-- PERFIL -->
         <activity
             android:name=".ProfileActivity"
