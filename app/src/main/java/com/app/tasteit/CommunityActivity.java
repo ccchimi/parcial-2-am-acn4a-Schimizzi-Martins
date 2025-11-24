@@ -47,10 +47,15 @@ public class CommunityActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_community);
 
-        // Toolbar + Drawer
+        // Toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        // Menu de cuenta (icono)
         ImageView ivAccount = findViewById(R.id.ivAccount);
         AccountMenuHelper.setup(this, ivAccount);
 
+        // Drawer
         drawerLayout = findViewById(R.id.drawerLayout);
         navigationView = findViewById(R.id.navigationView);
 
@@ -64,19 +69,15 @@ public class CommunityActivity extends AppCompatActivity {
 
             if (id == R.id.nav_inicio) {
                 startActivity(new Intent(this, MainActivity.class));
-            }
-            else if (id == R.id.nav_recetas) {
+            } else if (id == R.id.nav_recetas) {
                 startActivity(new Intent(this, RecipesActivity.class));
-            }
-            else if (id == R.id.nav_comunidad) {
+            } else if (id == R.id.nav_comunidad) {
                 drawerLayout.closeDrawers();
-            }
-            else if (id == R.id.nav_favoritos) {
+            } else if (id == R.id.nav_favoritos) {
                 Intent intent = new Intent(this, RecipesActivity.class);
                 intent.putExtra("showFavorites", true);
                 startActivity(intent);
-            }
-            else if (id == R.id.nav_logout) {
+            } else if (id == R.id.nav_logout) {
                 LoginActivity.currentUser = null;
                 Toast.makeText(this, getString(R.string.session_closed), Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(this, LoginActivity.class));
