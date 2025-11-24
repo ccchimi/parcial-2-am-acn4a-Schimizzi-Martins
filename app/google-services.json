@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "353695705222",
+    "project_id": "tastel-app",
+    "storage_bucket": "tastel-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:353695705222:android:96b42d28f7328f54370907",
+        "android_client_info": {
+          "package_name": "com.app.tasteit"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyNU2s1xvvZbIYv1pJwlX0swkzN9_e5wc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
