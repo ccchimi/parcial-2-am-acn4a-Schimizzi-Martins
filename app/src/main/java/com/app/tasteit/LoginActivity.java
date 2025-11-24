@@ -1,98 +1,105 @@
 package com.app.tasteit;
-import androidx.appcompat.app.AlertDialog;
+
 import androidx.appcompat.app.AppCompatActivity;
-import android.content.Context;
+
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class LoginActivity extends AppCompatActivity {
 
-    EditText etUsername, etPassword;
-    Button btnLogin, btnCreateUser;
-    TextView tvForgot;
+    private EditText etEmail, etPassword;
+    private Button btnLogin, btnCreateUser;
+    private TextView tvForgot;
+
+    private FirebaseAuth auth;
 
     public static String currentUser = null;
-    SharedPreferences sharedPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        etUsername = findViewById(R.id.etUsername);
+        auth = FirebaseAuth.getInstance();
+
+        etEmail = findViewById(R.id.etUsername);     // ahora es email real por la integracion con firebase
         etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLogin);
         btnCreateUser = findViewById(R.id.btnCreateUser);
         tvForgot = findViewById(R.id.tvForgot);
 
-        sharedPrefs = getSharedPreferences("UsersPrefs", Context.MODE_PRIVATE);
-        currentUser = sharedPrefs.getString("currentUser", null);
-
-        if(!sharedPrefs.contains("admin")) {
-            sharedPrefs.edit().putString("admin", "1234").apply();
+        // Si ya estaba logueado lo mando al Home
+        if (auth.getCurrentUser() != null) {
+            currentUser = auth.getCurrentUser().getEmail();
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
         }
 
-        btnLogin.setOnClickListener(v -> {
-            String user = etUsername.getText().toString().trim();
-            String pass = etPassword.getText().toString().trim();
-
-            String storedPass = sharedPrefs.getString(user, null);
-            if(storedPass != null && storedPass.equals(pass)) {
-                currentUser = user;
-                sharedPrefs.edit().putString("currentUser", currentUser).apply();
-                Toast.makeText(this, getString(R.string.login_success, user), Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(this, MainActivity.class));
-                finish();
-            } else {
-                Toast.makeText(this, getString(R.string.login_error), Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        btnCreateUser.setOnClickListener(v -> {
-            String user = etUsername.getText().toString().trim();
-            String pass = etPassword.getText().toString().trim();
-
-            if(user.isEmpty() || pass.isEmpty()) {
-                Toast.makeText(this, getString(R.string.empty_fields), Toast.LENGTH_SHORT).show();
-            } else if(sharedPrefs.contains(user)) {
-                Toast.makeText(this, getString(R.string.user_exists), Toast.LENGTH_SHORT).show();
-            } else {
-                sharedPrefs.edit().putString(user, pass).apply();
-                Toast.makeText(this, getString(R.string.user_created), Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        tvForgot.setOnClickListener(v -> {
-            String user = etUsername.getText().toString().trim();
-            if(sharedPrefs.contains(user)) {
-                EditText input = new EditText(this);
-                input.setHint(getString(R.string.login_password));
-
-                new AlertDialog.Builder(this)
-                        .setTitle(getString(R.string.change_password_title))
-                        .setMessage(getString(R.string.change_password_message, user))
-                        .setView(input)
-                        .setPositiveButton(getString(R.string.accept), (dialog, which) -> {
-                            String newPass = input.getText().toString().trim();
-                            sharedPrefs.edit().putString(user, newPass).apply();
-                            Toast.makeText(this, getString(R.string.user_updated), Toast.LENGTH_SHORT).show();
-                        })
-                        .setNegativeButton(getString(R.string.cancel), null)
-                        .show();
-            } else {
-                Toast.makeText(this, getString(R.string.user_not_found), Toast.LENGTH_SHORT).show();
-            }
-        });
+        btnLogin.setOnClickListener(v -> loginUser());
+        btnCreateUser.setOnClickListener(v -> goToRegister());
+        tvForgot.setOnClickListener(v -> resetPassword());
     }
 
-    public static void logout(Context context, SharedPreferences prefs) {
+    private void loginUser() {
+        String email = etEmail.getText().toString().trim();
+        String pass = etPassword.getText().toString().trim();
+
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            etEmail.setError("Email inválido");
+            return;
+        }
+        if (pass.isEmpty()) {
+            etPassword.setError("Ingrese contraseña");
+            return;
+        }
+
+        auth.signInWithEmailAndPassword(email, pass)
+                .addOnSuccessListener(result -> {
+                    currentUser = email;
+                    Toast.makeText(this, "Bienvenido " + email, Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(this, MainActivity.class));
+                    finish();
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                );
+    }
+
+    private void resetPassword() {
+        String email = etEmail.getText().toString().trim();
+
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            Toast.makeText(this, "Ingresá un email válido primero", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        auth.sendPasswordResetEmail(email)
+                .addOnSuccessListener(v ->
+                        Toast.makeText(this, "Se envió un email para recuperar contraseña", Toast.LENGTH_LONG).show()
+                )
+                .addOnFailureListener(e ->
+                        Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                );
+    }
+
+    private void goToRegister() {
+        startActivity(new Intent(this, RegisterActivity.class));
+    }
+
+    // Método usado por ProfileActivity
+    public static void logout(AppCompatActivity activity) {
+        FirebaseAuth.getInstance().signOut();
         currentUser = null;
-        prefs.edit().remove("currentUser").apply();
-        Toast.makeText(context, context.getString(R.string.session_closed), Toast.LENGTH_SHORT).show();
+
+        Toast.makeText(activity, "Sesión cerrada", Toast.LENGTH_SHORT).show();
+        activity.startActivity(new Intent(activity, LoginActivity.class));
+        activity.finish();
     }
 }
