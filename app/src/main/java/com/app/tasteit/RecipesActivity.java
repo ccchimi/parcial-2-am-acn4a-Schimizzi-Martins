@@ -32,7 +32,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RecipesActivity extends AppCompatActivity {
+public class        RecipesActivity extends AppCompatActivity {
 
     EditText etSearch;
     Button btnSearch;
@@ -64,12 +64,17 @@ public class RecipesActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Drawer
         drawerLayout = findViewById(R.id.drawerLayout);
         navigationView = findViewById(R.id.navigationView);
-
-        toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.app_name, R.string.app_name);
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
+                R.string.app_name, R.string.app_name);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+
+        // Menu cuenta
+        ImageView ivAccount = findViewById(R.id.ivAccount);
+        AccountMenuHelper.setup(this, ivAccount);
 
         sharedPrefs = getSharedPreferences("FavoritesPrefs", Context.MODE_PRIVATE);
 
@@ -130,26 +135,6 @@ public class RecipesActivity extends AppCompatActivity {
             } else {
                 adapter.setRecipes(searchRecipes(q));
             }
-        });
-
-        ImageView ivAccount = findViewById(R.id.ivAccount);
-        ivAccount.setOnClickListener(v -> {
-            PopupMenu menu = new PopupMenu(this, ivAccount);
-            if (LoginActivity.currentUser == null) menu.getMenu().add("Login");
-            else menu.getMenu().add("Logout");
-
-            menu.setOnMenuItemClickListener(item -> {
-                if (item.getTitle().equals("Login")) {
-                    startActivity(new Intent(this, LoginActivity.class));
-                } else {
-                    Toast.makeText(this, getString(R.string.session_closed), Toast.LENGTH_SHORT).show();
-                    LoginActivity.currentUser = null;
-                    startActivity(new Intent(this, LoginActivity.class));
-                    finish();
-                }
-                return true;
-            });
-            menu.show();
         });
     }
 

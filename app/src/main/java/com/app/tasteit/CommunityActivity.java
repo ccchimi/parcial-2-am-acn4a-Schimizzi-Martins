@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -47,8 +48,8 @@ public class CommunityActivity extends AppCompatActivity {
         setContentView(R.layout.activity_community);
 
         // Toolbar + Drawer
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        ImageView ivAccount = findViewById(R.id.ivAccount);
+        AccountMenuHelper.setup(this, ivAccount);
 
         drawerLayout = findViewById(R.id.drawerLayout);
         navigationView = findViewById(R.id.navigationView);

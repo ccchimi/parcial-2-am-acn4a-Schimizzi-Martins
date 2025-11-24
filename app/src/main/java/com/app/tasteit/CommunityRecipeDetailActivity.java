@@ -1,6 +1,7 @@
 package com.app.tasteit;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Context;
 import android.content.Intent;
@@ -39,6 +40,12 @@ public class CommunityRecipeDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_community_recipe_detail);
 
+        // Toolbar + menú de cuenta
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ImageView ivAccount = findViewById(R.id.ivAccount);
+        AccountMenuHelper.setup(this, ivAccount);
+
         detailImage = findViewById(R.id.detailImage);
         detailTitle = findViewById(R.id.detailTitle);
         detailAuthor = findViewById(R.id.detailAuthor);
@@ -67,7 +74,6 @@ public class CommunityRecipeDetailActivity extends AppCompatActivity {
 
         btnDownload.setOnClickListener(v -> downloadRecipe(recipe));
 
-        // Solo el dueño puede editar
         String currentUser = LoginActivity.currentUser;
         if (currentUser == null || !currentUser.equals(recipe.getAuthor())) {
             btnEdit.setEnabled(false);

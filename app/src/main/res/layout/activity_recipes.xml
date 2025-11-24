@@ -18,7 +18,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/primary"
-            android:elevation="@dimen/card_elevation_small">
+            android:elevation="@dimen/card_elevation_small"
+            android:padding="@dimen/padding_s">
 
             <TextView
                 android:id="@+id/tvMainTitle"
@@ -27,8 +28,7 @@
                 android:text="Recetas"
                 android:textSize="@dimen/text_title"
                 android:textStyle="bold"
-                android:textColor="@android:color/white"
-                android:padding="@dimen/padding_m"/>
+                android:textColor="@android:color/white"/>
 
             <ImageView
                 android:id="@+id/ivAccount"
@@ -36,6 +36,7 @@
                 android:layout_height="@dimen/icon_size"
                 android:src="@drawable/cuenta"
                 android:layout_gravity="end"
+                android:layout_marginStart="16dp"
                 android:layout_marginEnd="@dimen/margin_s"/>
         </androidx.appcompat.widget.Toolbar>
 

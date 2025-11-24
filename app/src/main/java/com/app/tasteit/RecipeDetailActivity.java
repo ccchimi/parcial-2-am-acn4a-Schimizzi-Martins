@@ -1,6 +1,7 @@
 package com.app.tasteit;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -34,6 +35,12 @@ public class RecipeDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail);
 
+        // Toolbar + menú de cuenta
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ImageView ivAccount = findViewById(R.id.ivAccount);
+        AccountMenuHelper.setup(this, ivAccount);
+
         detailImage = findViewById(R.id.detailImage);
         detailTitle = findViewById(R.id.detailTitle);
         detailDescription = findViewById(R.id.detailDescription);
@@ -47,12 +54,11 @@ public class RecipeDetailActivity extends AppCompatActivity {
         recipeTime = getIntent().getStringExtra("time");
         recipeImageUrl = getIntent().getStringExtra("imageUrl");
 
-        if(recipeTime == null) recipeTime = "";
+        if (recipeTime == null) recipeTime = "";
 
         detailTitle.setText(recipeTitle);
         detailDescription.setText(recipeDescription);
 
-        // CARGA DE IMAGEN REAL DESDE URL
         Glide.with(this)
                 .load(recipeImageUrl)
                 .placeholder(R.drawable.tastel)
@@ -62,7 +68,6 @@ public class RecipeDetailActivity extends AppCompatActivity {
         updateFavoriteButton();
 
         btnBack.setOnClickListener(v -> finish());
-
         btnFavorite.setOnClickListener(v -> toggleFavorite());
     }
 

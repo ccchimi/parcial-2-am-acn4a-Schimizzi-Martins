@@ -74,39 +74,9 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
-        // Menu de cuenta (icono arriba a la derecha)
+        // Menú de cuenta (icono arriba a la derecha)
         ImageView ivAccount = findViewById(R.id.ivAccount);
-        ivAccount.setOnClickListener(v -> {
-            PopupMenu menu = new PopupMenu(this, ivAccount);
-
-            if (LoginActivity.currentUser == null) {
-                menu.getMenu().add("Login");
-            } else {
-                menu.getMenu().add("Mi perfil");
-                menu.getMenu().add("Logout");
-            }
-
-            menu.setOnMenuItemClickListener(item -> {
-                String title = item.getTitle().toString();
-
-                if (title.equals("Login")) {
-                    startActivity(new Intent(this, LoginActivity.class));
-                }
-                else if (title.equals("Mi perfil")) {
-                    startActivity(new Intent(this, ProfileActivity.class));
-                }
-                else if (title.equals("Logout")) {
-                    Toast.makeText(this, getString(R.string.session_closed), Toast.LENGTH_SHORT).show();
-                    LoginActivity.currentUser = null;
-                    startActivity(new Intent(this, LoginActivity.class));
-                    finish();
-                }
-
-                return true;
-            });
-
-            menu.show();
-        });
+        AccountMenuHelper.setup(this, ivAccount);
 
         // Botones de accesos rápidos
         findViewById(R.id.btnGoRecipes).setOnClickListener(v ->

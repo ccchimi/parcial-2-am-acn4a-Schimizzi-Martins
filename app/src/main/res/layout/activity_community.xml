@@ -34,6 +34,14 @@
                     android:textSize="@dimen/text_title"
                     android:textColor="@android:color/white"/>
 
+                <ImageView
+                    android:id="@+id/ivAccount"
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:src="@drawable/cuenta"
+                    android:layout_gravity="end"
+                    android:layout_marginStart="@dimen/margin_s"
+                    android:layout_marginEnd="@dimen/margin_s"/>
             </androidx.appcompat.widget.Toolbar>
 
             <!-- Hero con explicación -->
