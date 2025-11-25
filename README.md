@@ -1,4 +1,4 @@
-# 📱 Tastel – App Móvil de Recetas  
+# Tastel – App Móvil de Recetas  
 ### Proyecto Académico – Parcial I y II  
 **Materia:** Aplicaciones Móviles (Da Vinci)  
 **Profesor:** Sergio Daniel Medina  
