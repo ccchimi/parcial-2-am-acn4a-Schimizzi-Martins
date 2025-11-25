@@ -238,50 +238,32 @@ public class ProfileActivity extends AppCompatActivity {
 
         FirebaseUser user = firebaseUser;
 
-        // 1) Actualizar email en Auth si cambio
+        // 1) CAMBIO DE EMAIL – ahora con verifyBeforeUpdateEmail
         if (!newEmail.equals(currentEmail)) {
-            user.updateEmail(newEmail)
-                    .addOnSuccessListener(v -> {
-                        currentEmail = newEmail;
-                        Toast.makeText(this, "Email actualizado en Auth", Toast.LENGTH_SHORT).show();
 
-                        // Luego de Auth, actualizamos Firestore
+            user.verifyBeforeUpdateEmail(newEmail)
+                    .addOnSuccessListener(v -> {
+                        // el email en Auth se actualizara recién cuando
+                        // el usuario confirme el link del correo (que le llegara a su mail real)
+                        currentEmail = newEmail;
+
+                        Toast.makeText(this,
+                                "Te enviamos un mail a " + newEmail +
+                                        " para confirmar el cambio de email.",
+                                Toast.LENGTH_LONG).show();
                         updateUserDocument(newFirstName, newLastName, newEmail);
                     })
                     .addOnFailureListener(e -> {
-                        String msg;
-
-                        // LOG extra para ver que pasa
-                        if (e instanceof com.google.firebase.auth.FirebaseAuthException) {
-                            com.google.firebase.auth.FirebaseAuthException fae =
-                                    (com.google.firebase.auth.FirebaseAuthException) e;
-                            Log.e("ProfileActivity",
-                                    "updateEmail errorCode=" + fae.getErrorCode()
-                                            + " message=" + fae.getMessage(), e);
-                        } else {
-                            Log.e("ProfileActivity",
-                                    "updateEmail generic error: " + e.getClass().getName()
-                                            + " - " + e.getMessage(), e);
-                        }
-
-                        if (e instanceof FirebaseAuthUserCollisionException) {
-                            msg = "Ese email ya está en uso por otra cuenta.";
-                        } else if (e instanceof FirebaseAuthRecentLoginRequiredException) {
-                            msg = "Debés volver a iniciar sesión para cambiar el email.";
-                        } else if (e instanceof FirebaseAuthInvalidCredentialsException) {
-                            msg = "El formato de email no es válido.";
-                        } else {
-                            msg = "No se pudo actualizar el email: " + e.getMessage();
-                        }
-
+                        String msg = "No se pudo iniciar el cambio de email: " + e.getMessage();
                         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
                     });
+
         } else {
-            // Si el email no cambio, igual actualizamos los otros datos en Firestore
+            // Email no cambio, solo actualizamos nombre/apellido en Firestore
             updateUserDocument(newFirstName, newLastName, newEmail);
         }
 
-        // 2) Actualizar contraseña si se ingreso algo
+        // 2) CAMBIO DE CONTRASEÑA
         if (!newPassword.isEmpty()) {
             user.updatePassword(newPassword)
                     .addOnSuccessListener(v ->
