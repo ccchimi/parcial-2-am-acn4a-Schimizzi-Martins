@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -17,6 +18,9 @@ import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -128,7 +132,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         etEmail.setText(currentEmail);
 
-        // Adapter sin listener extra (usa el click interno que ya abre el detalle)
+        // Adapter (usa el click interno para detalle/favs)
         myAdapter = new CommunityRecipeAdapter(this, myCommunityRecipes);
         rvMyRecipes.setAdapter(myAdapter);
 
@@ -233,21 +237,38 @@ public class ProfileActivity extends AppCompatActivity {
 
         FirebaseUser user = firebaseUser;
 
-        // Actualizar email en Auth si cambio
+        // 1) Actualizar email en Auth si cambio
         if (!newEmail.equals(currentEmail)) {
             user.updateEmail(newEmail)
                     .addOnSuccessListener(v -> {
                         currentEmail = newEmail;
                         Toast.makeText(this, "Email actualizado en Auth", Toast.LENGTH_SHORT).show();
+
+                        // Despues de actualizar en Auth, actualizamos Firestore
+                        updateUserDocument(newFirstName, newLastName, newEmail);
                     })
-                    .addOnFailureListener(e ->
-                            Toast.makeText(this,
-                                    "Error al actualizar email: " + e.getMessage(),
-                                    Toast.LENGTH_SHORT).show()
-                    );
+                    .addOnFailureListener(e -> {
+                        String msg;
+
+                        if (e instanceof FirebaseAuthUserCollisionException) {
+                            msg = "Ese email ya está en uso por otra cuenta.";
+                        } else if (e instanceof FirebaseAuthRecentLoginRequiredException) {
+                            msg = "Debés volver a iniciar sesión para cambiar el email.";
+                        } else if (e instanceof FirebaseAuthInvalidCredentialsException) {
+                            msg = "El formato de email no es válido.";
+                        } else {
+                            msg = "No se pudo actualizar el email: " + e.getMessage();
+                        }
+
+                        Log.e("ProfileActivity", "updateEmail error", e);
+                        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+                    });
+        } else {
+            // Si el email no cambio, igual actualizamos el resto de campos en Firestore
+            updateUserDocument(newFirstName, newLastName, newEmail);
         }
 
-        // Actualizar contraseña si se ingreso algo
+        // 2) Actualizar contraseña si se ingreso algo
         if (!newPassword.isEmpty()) {
             user.updatePassword(newPassword)
                     .addOnSuccessListener(v ->
@@ -261,8 +282,9 @@ public class ProfileActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show()
                     );
         }
+    }
 
-        // Actualizar datos en Firestore
+    private void updateUserDocument(String newFirstName, String newLastName, String newEmail) {
         if (userDocId != null) {
             Map<String, Object> updates = new HashMap<>();
             updates.put("firstName", newFirstName);
