@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -244,11 +245,24 @@ public class ProfileActivity extends AppCompatActivity {
                         currentEmail = newEmail;
                         Toast.makeText(this, "Email actualizado en Auth", Toast.LENGTH_SHORT).show();
 
-                        // Despues de actualizar en Auth, actualizamos Firestore
+                        // Luego de Auth, actualizamos Firestore
                         updateUserDocument(newFirstName, newLastName, newEmail);
                     })
                     .addOnFailureListener(e -> {
                         String msg;
+
+                        // LOG extra para ver que pasa
+                        if (e instanceof com.google.firebase.auth.FirebaseAuthException) {
+                            com.google.firebase.auth.FirebaseAuthException fae =
+                                    (com.google.firebase.auth.FirebaseAuthException) e;
+                            Log.e("ProfileActivity",
+                                    "updateEmail errorCode=" + fae.getErrorCode()
+                                            + " message=" + fae.getMessage(), e);
+                        } else {
+                            Log.e("ProfileActivity",
+                                    "updateEmail generic error: " + e.getClass().getName()
+                                            + " - " + e.getMessage(), e);
+                        }
 
                         if (e instanceof FirebaseAuthUserCollisionException) {
                             msg = "Ese email ya está en uso por otra cuenta.";
@@ -260,11 +274,10 @@ public class ProfileActivity extends AppCompatActivity {
                             msg = "No se pudo actualizar el email: " + e.getMessage();
                         }
 
-                        Log.e("ProfileActivity", "updateEmail error", e);
                         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
                     });
         } else {
-            // Si el email no cambio, igual actualizamos el resto de campos en Firestore
+            // Si el email no cambio, igual actualizamos los otros datos en Firestore
             updateUserDocument(newFirstName, newLastName, newEmail);
         }
 
